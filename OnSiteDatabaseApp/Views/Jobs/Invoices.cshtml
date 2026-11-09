@@ -1,0 +1,34 @@
+@model List<Job>
+@{
+    ViewData["Title"] = "Invoices";
+}
+
+<h1>Invoices</h1>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">No finished jobs yet. Complete a job to create an invoice.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr><th>Job</th><th>Client</th><th class="text-end">Total</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach (var job in Model)
+            {
+                <tr>
+                    <td>#@job.Id</td>
+                    <td>@job.ClientName</td>
+                    <td class="text-end">@job.Total.ToString("C")</td>
+                    <td class="text-end">
+                        <a asp-action="Invoice" asp-route-id="@job.Id" class="btn btn-primary">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-dark btn-lg w-100">Back to Home</a>

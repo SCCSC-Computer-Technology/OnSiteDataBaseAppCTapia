@@ -1,0 +1,34 @@
+@model Job
+@{
+    ViewData["Title"] = "Invoice " + Model.Id;
+}
+
+<h1>Invoice - Job #@Model.Id</h1>
+<p class="mb-1"><strong>Client:</strong> @Model.ClientName</p>
+<p class="mb-1"><strong>Service:</strong> @Model.Service</p>
+<p><strong>Date:</strong> @Model.ScheduledTime.ToString("MMM d, yyyy")</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr><th>Item</th><th class="text-end">Amount</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Checklist)
+        {
+            @if (item.IsCompleted)
+            {
+                <tr>
+                    <td>@item.TaskLabel</td>
+                    <td class="text-end">@item.BillableValue.ToString("C")</td>
+                </tr>
+            }
+        }
+    </tbody>
+    <tfoot>
+        <tr><th>Total</th><th class="text-end">@Model.Total.ToString("C")</th></tr>
+    </tfoot>
+</table>
+
+
+<button type="button" class="btn btn-primary btn-lg w-100 mb-3" onclick="window.print()">Print / Save as PDF</button>
+<a asp-action="Index" class="btn btn-dark btn-lg w-100">Back to Schedule</a>

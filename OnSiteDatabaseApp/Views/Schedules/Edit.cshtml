@@ -1,0 +1,41 @@
+@model Job
+@{
+    ViewData["Title"] = "Edit Job";
+}
+
+<h1>Edit Job #@Model.Id</h1>
+
+<form asp-action="Edit" method="post" class="col-md-6">
+    <div asp-validation-summary="All" class="text-danger fw-bold"></div>
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="mb-3">
+            <label for="CustomerId" class="form-label">Customer</label>
+            <select id="CustomerId" name="CustomerId" class="form-select form-select-lg">
+                @foreach (var customer in (List<Customer>)ViewBag.Customers)
+                {
+                    <option value="@customer.Id" selected="@(customer.Id == Model.CustomerId)">@customer.Name</option>
+                }
+            </select>
+    </div>
+    <div class="mb-3">
+        <label for="Service" class="form-label">Service</label>
+        <input id="Service" name="Service" value="@Model.Service" class="form-control form-control-lg" />
+    </div>
+    <div class="mb-3">
+        <label for="TechnicianId" class="form-label">Technician</label>
+        <select id="TechnicianId" name="TechnicianId" class="form-select form-select-lg">
+            <option value="">-- Unassigned --</option>
+            @foreach (var tech in (List<Technician>)ViewBag.Technicians)
+            {
+                <option value="@tech.Id" selected="@(tech.Id == Model.TechnicianId)">@tech.TechNumber - @tech.Name</option>
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="ScheduledTime" class="form-label">Date and time</label>
+        <input id="ScheduledTime" name="ScheduledTime" type="datetime-local"
+               value="@Model.ScheduledTime.ToString("yyyy-MM-ddTHH:mm")" class="form-control form-control-lg" />
+    </div>
+    <button type="submit" class="btn btn-success btn-lg">Save Changes</button>
+    <a asp-action="Index" class="btn btn-dark btn-lg">Cancel</a>
+</form>

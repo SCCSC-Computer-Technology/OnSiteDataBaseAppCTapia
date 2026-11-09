@@ -1,0 +1,110 @@
+@model SchedulesViewModel
+@{
+    ViewData["Title"] = "Manage Schedules";
+}
+
+<h1>Manage Schedules</h1>
+
+<h2 class="h4">Add Job</h2>
+@if (Model.Customers.Count == 0)
+{
+    <div class="alert alert-info">
+        Add a customer first, then you can schedule a job for them.
+        <a asp-controller="Customers" asp-action="Index" class="alert-link">Go to Customers</a>
+    </div>
+}
+else
+{
+    <form asp-action="Add" method="post" class="card card-body mb-4">
+        <div asp-validation-summary="All" class="text-danger fw-bold"></div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-3">
+                <label for="CustomerId" class="form-label">Customer</label>
+                <select id="CustomerId" name="CustomerId" class="form-select form-select-lg">
+                    <option value="0">-- Pick a customer --</option>
+                    @foreach (var customer in Model.Customers)
+                    {
+                        <option value="@customer.Id" selected="@(customer.Id == Model.Form.CustomerId)">@customer.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="Service" class="form-label">Service</label>
+                <input id="Service" name="Service" value="@Model.Form.Service" class="form-control form-control-lg" />
+            </div>
+            <div class="col-md-3">
+                <label for="TechnicianId" class="form-label">Technician</label>
+                <select id="TechnicianId" name="TechnicianId" class="form-select form-select-lg">
+                    <option value="">-- Unassigned --</option>
+                    @foreach (var tech in Model.Technicians)
+                    {
+                        <option value="@tech.Id" selected="@(tech.Id == Model.Form.TechnicianId)">@tech.TechNumber - @tech.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="ScheduledTime" class="form-label">Date and time</label>
+                <input id="ScheduledTime" name="ScheduledTime" type="datetime-local"
+                       value="@Model.Form.ScheduledTime.ToString("yyyy-MM-ddTHH:mm")" class="form-control form-control-lg" />
+            </div>
+        </div>
+
+        <p class="fw-bold mb-2">Checklist (leave blank rows empty)</p>
+        @for (var i = 0; i < Model.Form.Items.Count; i++)
+        {
+            <div class="row g-2 mb-2">
+                <div class="col-8">
+                    <input name="Items[@i].TaskLabel" value="@Model.Form.Items[i].TaskLabel" placeholder="Task" class="form-control form-control-lg" />
+                </div>
+                <div class="col-4">
+                    <input name="Items[@i].BillableValue" value="@Model.Form.Items[i].BillableValue" type="number" step="0.01" min="0" placeholder="Price" class="form-control form-control-lg" />
+                </div>
+            </div>
+        }
+
+        <button type="submit" class="btn btn-success btn-lg mt-3">Add Job</button>
+    </form>
+}
+
+<h2 class="h4">All Jobs (@Model.Jobs.Count)</h2>
+<table class="table table-striped align-middle">
+    <thead>
+        <tr><th>Job</th><th>When</th><th>Customer</th><th>Service</th><th>Tech</th><th>Status</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var job in Model.Jobs)
+        {
+            string techText = "Unassigned";
+            foreach (var tech in Model.Technicians)
+            {
+                if (tech.Id == job.TechnicianId)
+                {
+                    techText = tech.TechNumber.ToString();
+                }
+            }
+            <tr>
+                <td>#@job.Id</td>
+                <td>@job.ScheduledTime.ToString("MMM d, hh:mm tt")</td>
+                <td>@job.ClientName</td>
+                <td>@job.Service</td>
+                <td>@techText</td>
+                <td>
+                    <span class="badge text-bg-dark">@job.StatusText</span>
+                    @if (job.IsLate)
+                    {
+                        <span class="badge text-bg-danger">LATE</span>
+                    }
+                </td>
+                <td class="text-end">
+                    <form asp-action="Delete" asp-route-id="@job.Id" method="post" class="d-inline">
+                        <a asp-action="Edit" asp-route-id="@job.Id" class="btn btn-primary">Edit</a>
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this job?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-dark btn-lg w-100">Back to Home</a>

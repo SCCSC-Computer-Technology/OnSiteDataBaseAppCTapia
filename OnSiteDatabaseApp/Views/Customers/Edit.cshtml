@@ -1,0 +1,25 @@
+@model Customer
+@{
+    ViewData["Title"] = "Edit Customer";
+}
+
+<h1>Edit Customer</h1>
+
+<form asp-action="Edit" method="post" class="col-md-6">
+    <div asp-validation-summary="All" class="text-danger fw-bold"></div>
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="mb-3">
+        <label for="Name" class="form-label">Name</label>
+        <input id="Name" name="Name" value="@Model.Name" class="form-control form-control-lg" />
+    </div>
+    <div class="mb-3">
+        <label for="Phone" class="form-label">Phone</label>
+        <input id="Phone" name="Phone" value="@Model.Phone" class="form-control form-control-lg" />
+    </div>
+    <div class="mb-3">
+        <label for="Address" class="form-label">Address</label>
+        <input id="Address" name="Address" value="@Model.Address" class="form-control form-control-lg" />
+    </div>
+    <button type="submit" class="btn btn-success btn-lg">Save Changes</button>
+    <a asp-action="Index" class="btn btn-dark btn-lg">Cancel</a>
+</form>

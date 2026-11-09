@@ -1,0 +1,17 @@
+/* Darker button colors and bigger nav links. */
+body { color: #000; font-size: 1.15rem; }
+
+.navbar-brand { font-size: 1.6rem; }
+.navbar-nav .nav-link { font-size: 1.1rem; font-weight: 600; padding: 8px 16px; border-radius: 8px; }
+
+.onsite-nav { background-color: #1f2d3d; }
+.onsite-nav .navbar-brand { color: #fff; }
+.onsite-nav .nav-link { color: rgba(255, 255, 255, 0.8); }
+.onsite-nav .nav-link:hover { color: #fff; background-color: rgba(255, 255, 255, 0.12); }
+.onsite-nav .nav-link.active { color: #fff; background-color: #006400; }
+
+.btn-success { --bs-btn-bg: #006400; --bs-btn-border-color: #006400; --bs-btn-hover-bg: #004d00; --bs-btn-hover-border-color: #004d00; }
+.btn-primary { --bs-btn-bg: #002b80; --bs-btn-border-color: #002b80; --bs-btn-hover-bg: #001f5c; --bs-btn-hover-border-color: #001f5c; }
+.btn-danger { --bs-btn-bg: #8b0000; --bs-btn-border-color: #8b0000; --bs-btn-hover-bg: #6b0000; --bs-btn-hover-border-color: #6b0000; }
+.btn-info { --bs-btn-color: #000; }
+.text-bg-danger { background-color: #8b0000 !important; }

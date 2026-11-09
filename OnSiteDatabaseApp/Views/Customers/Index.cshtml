@@ -1,0 +1,56 @@
+@model List<Customer>
+@{
+    ViewData["Title"] = "Customers";
+}
+
+<h1>Customers</h1>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<h2 class="h4">Add Customer</h2>
+<form asp-action="Add" method="post" class="card card-body mb-4">
+    <div asp-validation-summary="All" class="text-danger fw-bold"></div>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label for="Name" class="form-label">Name</label>
+            <input id="Name" name="Name" class="form-control form-control-lg" />
+        </div>
+        <div class="col-md-4">
+            <label for="Phone" class="form-label">Phone</label>
+            <input id="Phone" name="Phone" class="form-control form-control-lg" />
+        </div>
+        <div class="col-md-4">
+            <label for="Address" class="form-label">Address</label>
+            <input id="Address" name="Address" class="form-control form-control-lg" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success btn-lg mt-3">Add Customer</button>
+</form>
+
+<h2 class="h4">All Customers (@Model.Count)</h2>
+<table class="table table-striped align-middle">
+    <thead>
+        <tr><th>Name</th><th>Phone</th><th>Address</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+            <tr>
+                <td>@customer.Name</td>
+                <td>@customer.Phone</td>
+                <td>@customer.Address</td>
+                <td class="text-end">
+                    <form asp-action="Delete" asp-route-id="@customer.Id" method="post" class="d-inline">
+                        <a asp-action="Edit" asp-route-id="@customer.Id" class="btn btn-primary">Edit</a>
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this customer?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-dark btn-lg w-100">Back to Home</a>

@@ -1,0 +1,109 @@
+@model AdministratorViewModel
+@{
+    ViewData["Title"] = "Administrator";
+}
+
+<h1>Administrator</h1>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success fw-bold">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger fw-bold">@TempData["Error"]</div>
+}
+
+<div asp-validation-summary="All" class="text-danger fw-bold"></div>
+
+<h2 class="h4">Add Technician</h2>
+<form asp-action="AddTechnician" method="post" class="card card-body mb-4">
+    <div class="row g-3">
+        <div class="col-md-3">
+            <label for="TechNumber" class="form-label">Technician number</label>
+            <input id="TechNumber" name="TechNumber" type="number" min="1" value="@Model.TechForm.TechNumber" required class="form-control form-control-lg" />
+        </div>
+        <div class="col-md-5">
+            <label for="TechName" class="form-label">Name</label>
+            <input id="TechName" name="Name" value="@Model.TechForm.Name" required class="form-control form-control-lg" />
+        </div>
+        <div class="col-md-4">
+            <label for="TechPhone" class="form-label">Phone</label>
+            <input id="TechPhone" name="Phone" value="@Model.TechForm.Phone" required class="form-control form-control-lg" />
+        </div>
+        <div class="col-md-4">
+            <label for="TechEmail" class="form-label">Email</label>
+            <input id="TechEmail" name="Email" type="email" value="@Model.TechForm.Email" required class="form-control form-control-lg" />
+        </div>
+        <div class="col-md-4">
+            <label for="TechPassword" class="form-label">Password</label>
+            <input id="TechPassword" name="Password" type="password" class="form-control form-control-lg" autocomplete="new-password" required />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success btn-lg mt-3">Add Technician</button>
+</form>
+
+<h2 class="h4">Technicians (@Model.Technicians.Count)</h2>
+<table class="table table-striped align-middle mb-5">
+    <thead>
+        <tr><th>Number</th><th>Name</th><th>Phone</th><th>Email</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var tech in Model.Technicians)
+        {
+            <tr>
+                <td>@tech.TechNumber</td>
+                <td>@tech.Name</td>
+                <td>@tech.Phone</td>
+                <td>@tech.Email</td>
+                <td class="text-end">
+                    <form asp-action="ResetTechnicianPassword" asp-route-id="@tech.Id" method="post" class="d-inline-flex gap-2 me-2">
+                        <input name="newPassword" type="password" placeholder="New password" class="form-control" autocomplete="new-password" required minlength="4" />
+                        <button type="submit" class="btn btn-primary text-nowrap">Reset Password</button>
+                    </form>
+                    <form asp-action="DeleteTechnician" asp-route-id="@tech.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this technician? Their jobs will become unassigned.')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2 class="h4">Add Administrator</h2>
+<form asp-action="AddAdmin" method="post" class="card card-body mb-4">
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label for="AdminName" class="form-label">Name</label>
+            <input id="AdminName" name="Name" value="@Model.AdminForm.Name" class="form-control form-control-lg" required />
+        </div>
+        <div class="col-md-4">
+            <label for="AdminPassword" class="form-label">Password</label>
+            <input id="AdminPassword" name="Password" type="password" class="form-control form-control-lg" autocomplete="new-password" required />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success btn-lg mt-3">Add Administrator</button>
+</form>
+
+<h2 class="h4">Administrators (@Model.Admins.Count)</h2>
+<table class="table table-striped align-middle">
+    <thead>
+        <tr><th>Name</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var admin in Model.Admins)
+        {
+            <tr>
+                <td>@admin.Name</td>
+                <td class="text-end">
+                    <form asp-action="ResetAdminPassword" asp-route-id="@admin.Id" method="post" class="d-inline-flex gap-2">
+                        <input name="newPassword" type="password" placeholder="New password" class="form-control" autocomplete="new-password" required minlength="4" />
+                        <button type="submit" class="btn btn-primary text-nowrap">Reset Password</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-dark btn-lg w-100">Back to Home</a>

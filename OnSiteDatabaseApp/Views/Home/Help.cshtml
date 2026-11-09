@@ -1,0 +1,18 @@
+@{
+    ViewData["Title"] = "Help";
+}
+
+<h1>Help</h1>
+<p class="fs-4">
+    For any Assistance contact: Carlos Tapia<br />
+    My number: 8037471870<br />
+    Email: Ctap08@hotmail.com
+</p>
+@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    <a asp-action="Index" class="btn btn-dark btn-lg w-100">Back to Home</a>
+}
+else
+{
+    <a asp-controller="Account" asp-action="Login" class="btn btn-dark btn-lg w-100">Back to Login</a>
+}

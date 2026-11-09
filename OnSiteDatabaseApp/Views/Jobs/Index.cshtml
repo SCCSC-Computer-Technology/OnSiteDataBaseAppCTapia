@@ -1,0 +1,93 @@
+@model List<Job>
+@{
+    ViewData["Title"] = "Today's Schedule";
+    Job? nextJob = null;
+    var pending = new List<Job>();
+    var finished = new List<Job>();
+
+    foreach (var job in Model)
+    {
+        if (job.Status == JobStatus.Completed)
+        {
+            finished.Add(job);
+        }
+        else if (nextJob == null)
+        {
+            nextJob = job;
+        }
+        else
+        {
+            pending.Add(job);
+        }
+    }
+}
+
+<h1>Today's Schedule</h1>
+
+@if (nextJob == null)
+{
+    <div class="alert alert-info">No jobs left for today.</div>
+}
+else
+{
+    <h2 class="h4">Next Up</h2>
+    <div class="card border-success border-3 mb-4">
+        <div class="card-body">
+            <h3 class="card-title h5">Job #@nextJob.Id - @nextJob.ScheduledTime.ToString("hh:mm tt")</h3>
+            <p class="card-text mb-1">@nextJob.ClientName - @nextJob.Service</p>
+            <p class="card-text">@nextJob.Address</p>
+            <p>
+                <span class="badge text-bg-dark">@nextJob.StatusText</span>
+                @if (nextJob.IsLate)
+                {
+                    <span class="badge text-bg-danger">LATE</span>
+                }
+            </p>
+
+            @if (nextJob.Status == JobStatus.Scheduled)
+            {
+                <form asp-action="Navigate" asp-route-id="@nextJob.Id" method="post" class="mb-2">
+                    <button type="submit" class="btn btn-success btn-lg w-100 py-3">Start Navigation</button>
+                </form>
+            }
+            <a asp-action="Details" asp-route-id="@nextJob.Id" class="btn btn-primary btn-lg w-100 py-3">Open Job</a>
+        </div>
+    </div>
+}
+
+@if (pending.Count > 0)
+{
+    <h2 class="h4">Later Today</h2>
+    @foreach (var job in pending)
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 class="card-title h5">Job #@job.Id - @job.ScheduledTime.ToString("hh:mm tt")</h3>
+                <p class="card-text">
+                    @job.ClientName - @job.Service
+                    @if (job.IsLate)
+                    {
+                        <span class="badge text-bg-danger">LATE</span>
+                    }
+                </p>
+                <a asp-action="Details" asp-route-id="@job.Id" class="btn btn-dark btn-lg w-100">Open Job</a>
+            </div>
+        </div>
+    }
+}
+
+@if (finished.Count > 0)
+{
+    <h2 class="h4">Finished</h2>
+    @foreach (var job in finished)
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <p class="card-text"><strong>Job #@job.Id</strong> - @job.ClientName (@job.Total.ToString("C"))</p>
+                <a asp-action="Invoice" asp-route-id="@job.Id" class="btn btn-outline-dark btn-lg w-100">View Invoice</a>
+            </div>
+        </div>
+    }
+}
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-dark btn-lg w-100 mt-3">Back to Home</a>

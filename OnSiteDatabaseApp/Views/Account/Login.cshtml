@@ -1,0 +1,35 @@
+@model LoginForm
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h3 text-center mb-4">OnSite Login</h1>
+
+                <form asp-action="Login" method="post">
+                    <div asp-validation-summary="All" class="text-danger fw-bold"></div>
+
+                    <div class="mb-3">
+                        <label for="UserName" class="form-label">Technician number (or Admin Name)</label>
+                        <input id="UserName" name="UserName" value="@Model.UserName" class="form-control form-control-lg" autocomplete="username" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Password" class="form-label">Password</label>
+                        <input id="Password" name="Password" type="password" class="form-control form-control-lg" autocomplete="current-password" />
+                    </div>
+                    <div class="form-check mb-3">
+                        <input id="IsAdmin" name="IsAdmin" type="checkbox" value="true" class="form-check-input" checked="@Model.IsAdmin" />
+                        <label for="IsAdmin" class="form-check-label">Login as Admin</label>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-lg w-100">Log In</button>
+                </form>
+
+                <p class="text-muted text-center mt-3 mb-2">Forgot your password? Ask an administrator to reset it.</p>
+                <a asp-controller="Home" asp-action="Help" class="btn btn-outline-danger w-100 fw-bold">HELP</a>
+            </div>
+        </div>
+    </div>
+</div>

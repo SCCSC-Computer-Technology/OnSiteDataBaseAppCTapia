@@ -1,0 +1,44 @@
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success fw-bold">@TempData["Message"]</div>
+}
+
+@if (TempData["Premium"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fw-bold" role="alert">
+        @TempData["Premium"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="d-grid gap-3">
+    <a asp-controller="Jobs" asp-action="Index" class="btn btn-danger btn-lg py-4 fs-3 d-flex justify-content-between align-items-center">
+        <span>Pending Jobs</span>
+        <span>
+            <span class="badge text-bg-light text-success">@Model.OnTime on time</span>
+            <span class="badge text-bg-light text-danger">@Model.Late Late</span>
+        </span>
+    </a>
+    <a asp-controller="Jobs" asp-action="Invoices" class="btn btn-primary btn-lg py-4 fs-3 text-start">Invoices</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-controller="Schedules" asp-action="Index" class="btn btn-secondary btn-lg py-4 fs-3 text-start">Manage Schedules</a>
+        <a asp-controller="Customers" asp-action="Index" class="btn btn-dark btn-lg py-4 fs-3 text-start">Customers</a>
+        <a asp-controller="Administrator" asp-action="Index" class="btn btn-success btn-lg py-4 fs-3 text-start">Administrator</a>
+    }
+</div>
+
+<h2 class="h3 mt-5 mb-3">Premium</h2>
+<div class="d-grid gap-3">
+    <a asp-action="Analytics" class="btn btn-info btn-lg py-4 fs-3 text-start">Data Analytics</a>
+    <a asp-action="AiFunctionalities" class="btn btn-info btn-lg py-4 fs-3 text-start">AI Functionalities</a>
+</div>
+
+<div class="text-end mt-4">
+    <a asp-action="Help" class="btn btn-danger btn-lg rounded-circle fw-bold">HELP</a>
+</div>
